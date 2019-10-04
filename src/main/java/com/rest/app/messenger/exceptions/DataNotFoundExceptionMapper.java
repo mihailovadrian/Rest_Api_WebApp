@@ -13,7 +13,7 @@ public class DataNotFoundExceptionMapper implements
 
 	@Override
 	public Response toResponse(DataNotFoundException error) {
-		// TODO Auto-generated method stub
+
 		ErrorMessage errorMessage = new ErrorMessage(error.getMessage(),
 				"www.google.com", 404);
 		return Response.status(Status.NOT_FOUND).entity(errorMessage).build();
