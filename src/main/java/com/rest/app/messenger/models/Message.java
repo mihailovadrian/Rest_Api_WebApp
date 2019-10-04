@@ -16,7 +16,8 @@ public class Message {
 	private Date date;
 	private String Author;
 	private Map<Long, Comment> comments = new HashMap<>();
-	private List<Link> links= new ArrayList<>();
+	private List<Link> links = new ArrayList<>();
+
 	public Message() {
 	}
 
@@ -75,6 +76,13 @@ public class Message {
 
 	public void setComments(Map<Long, Comment> comments) {
 		this.comments = comments;
+	}
+
+	public void addLink(String url, String relation) {
+		Link link = new Link();
+		link.setLink(url);
+		link.setRelation(relation);
+		links.add(link);
 	}
 
 }

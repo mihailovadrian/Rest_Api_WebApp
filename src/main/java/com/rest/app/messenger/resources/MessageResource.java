@@ -18,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 
 import beans.MessageFilterBean;
 
+import com.rest.app.messenger.constants.LinkConstants;
 import com.rest.app.messenger.exceptions.DataNotFoundException;
 import com.rest.app.messenger.models.Message;
 import com.rest.app.messenger.services.MessageService;
@@ -44,12 +45,45 @@ public class MessageResource {
 	@GET
 	@Path("/{messageId}")
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	public Message getMessage(@PathParam("messageId") Long id) {
+	public Message getMessage(@PathParam("messageId") Long id,
+			@Context UriInfo info) {
 		Message message = messageService.getMessage(id);
-		if (message != null)
+
+		if (message != null) {
+			addURLtoLink(info, message);
 			return message;
-		else
+		} else
 			throw new DataNotFoundException("Message not found");
+	}
+
+	private void addURLtoLink(UriInfo info, Message message) {
+		addURLtoSelf(info, message);
+		addURLtoProfile(info, message);
+		addURLtoComments(info, message);
+	}
+
+	private void addURLtoComments(UriInfo info, Message message) {
+		String url = info.getBaseUriBuilder().path(MessageResource.class)
+				.path(MessageResource.class, "getCommentResource")
+				.path(CommentResource.class)
+				.resolveTemplate("messageId", message.getId())
+				.build()
+				.toString();
+		message.addLink(url, LinkConstants.COMMENTS);
+
+	}
+
+	private void addURLtoProfile(UriInfo info, Message message) {
+		String url = info.getBaseUriBuilder().path(ProfileResource.class)
+				.path(message.getAuthor()).build().toString();
+		message.addLink(url, LinkConstants.PROFILE);
+
+	}
+
+	private void addURLtoSelf(UriInfo info, Message message) {
+		String url = info.getBaseUriBuilder().path(MessageResource.class)
+				.path(String.valueOf(message.getId())).build().toString();
+		message.addLink(url, LinkConstants.SELF);
 	}
 
 	@POST
