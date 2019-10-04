@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.rest.app.messenger.db.Stupid_database;
 import com.rest.app.messenger.models.Comment;
+import com.rest.app.messenger.models.ErrorMessage;
 import com.rest.app.messenger.models.Message;
 
 public class CommentService {
@@ -17,7 +22,19 @@ public class CommentService {
 	}
 
 	public Comment getComment(Long messageId, Long commentId) {
+		Message message = messages.get(messageId);
+		ErrorMessage errorMessage = new ErrorMessage("Not found",
+				"www.google.com", 404);
+		Response response = Response.status(Status.NOT_FOUND)
+				.entity(errorMessage).build();
+
+		if (message == null)
+			throw new WebApplicationException(response);
+
 		Map<Long, Comment> comments = messages.get(messageId).getComments();
+
+		if (comments.get(commentId) == null)
+			throw new WebApplicationException(response);
 		return comments.get(commentId);
 	}
 

@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import com.rest.app.messenger.models.ErrorMessage;
-
+//@Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
 	@Override
