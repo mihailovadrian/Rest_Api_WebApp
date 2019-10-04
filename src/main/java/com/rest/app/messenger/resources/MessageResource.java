@@ -28,7 +28,7 @@ import com.rest.app.messenger.subresources.CommentResource;
 @Path("/messages")
 @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 @Produces(value = { javax.ws.rs.core.MediaType.APPLICATION_JSON,
-		MediaType.APPLICATION_XML })
+		MediaType.TEXT_XML })
 public class MessageResource {
 	MessageService messageService = new MessageService();
 
